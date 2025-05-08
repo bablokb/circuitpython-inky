@@ -22,7 +22,10 @@ BUSY_PIN  = board.GPIO17
 DC_PIN    = board.GPIO22
 RST_PIN   = board.GPIO27
 CS_PIN_D  = board.CE0
-CS_PIN_SD = board.SD_CS
+try:
+  CS_PIN_SD = board.SD_CS
+except:
+  pass
 BTN_PINS  = [board.GPIO5, board.GPIO6, board.GPIO16, board.GPIO24]
 
 # --- Inky-Impression base class   ----------------------------------------
@@ -43,7 +46,10 @@ class InkyImpression(InkyBase):
                           MOSI=MOSI_PIN,MISO=MISO_PIN)
 
     self.display = self._display(driver,busy_pin,**kwargs)
-    self._cs_pin_sd = CS_PIN_SD
+    try:
+      self._cs_pin_sd = CS_PIN_SD
+    except:
+      pass
 
   # --- free resources   ---------------------------------------------------
 
@@ -89,7 +95,7 @@ class InkyImpression4(InkyImpression):
     self._title     = "Inky-Impression 4"
 
 class InkyImpression57(InkyImpression):
-  def __init__(self):
+  def __init__(self,dither=False):
     import adafruit_spd1656
     super().__init__(adafruit_spd1656.SPD1656,dither=dither,
                      width=600,height=448,
