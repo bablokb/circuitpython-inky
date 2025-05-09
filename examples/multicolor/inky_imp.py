@@ -25,7 +25,7 @@ CS_PIN_D  = board.CE0
 try:
   CS_PIN_SD = board.SD_CS
 except:
-  pass
+  CS_PIN_SD = None
 BTN_PINS  = [board.GPIO5, board.GPIO6, board.GPIO16, board.GPIO24]
 
 # --- Inky-Impression base class   ----------------------------------------
@@ -38,18 +38,14 @@ class InkyImpression(InkyBase):
     """ constructor """
 
     if colors is None:
-      colors = [0xFFFFFF, 0x000000, 0x0000FF, 0x00FF00,
-                0xFF0000, 0xFFFF00, 0xFFA500]
-    print(f"{colors=}")
+      colors = [0x000000, 0xFFFFFF, 0x00FF00,
+                0x0000FF, 0xFF0000, 0xFFFF00, 0xFF8C00]
     super().__init__([board.LED],colors,dither=dither)
     self._spi = busio.SPI(SCK_PIN,
                           MOSI=MOSI_PIN,MISO=MISO_PIN)
 
     self.display = self._display(driver,busy_pin,**kwargs)
-    try:
-      self._cs_pin_sd = CS_PIN_SD
-    except:
-      pass
+    self._cs_pin_sd = CS_PIN_SD
 
   # --- free resources   ---------------------------------------------------
 

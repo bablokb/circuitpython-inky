@@ -64,10 +64,13 @@ class InkyBase:
 
   def _mount_sd(self):
     """ mount SD """
-    cs = self._cs_pin_sd
-    sdcard = sdcardio.SDCard(self._spi,cs,1_000_000)
-    vfs = storage.VfsFat(sdcard)
-    storage.mount(vfs, "/sd")
+
+    try:
+      sdcard = sdcardio.SDCard(self._spi,self._cs_pin_sd,1_000_000)
+      vfs = storage.VfsFat(sdcard)
+      storage.mount(vfs, "/sd")
+    except:
+      print("failed to mount SD, using internal /sd directory")
 
   # --- blink a single LED   ---------------------------------------------
 
