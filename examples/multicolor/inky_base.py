@@ -124,7 +124,7 @@ class InkyBase:
     """ show horizontal stripes """
 
     g = displayio.Group()
-    stripe_height = self.display.height // 7
+    stripe_height = self.display.height // len(self._palette)
     for i in range(len(self._palette)):
       rect = Rect(x=0,y=i*stripe_height,
                   width=self.display.width,height=stripe_height,
@@ -144,13 +144,13 @@ class InkyBase:
 
     self._mount_sd()
 
-    # create with:
-    # convert netscape: -resize 'widthxheight!' colors-widthxheight.bmp
-    f = open(f"/sd/image-{self.display.width}x{self.display.height}.bmp",
+    f = open(("/sd/image-" +
+              f"{self.display.width}x{self.display.height}-" +
+              f"{len(self._palette)}c.bmp"),
              "rb")
     g = displayio.Group()
     pic = displayio.OnDiskBitmap(f)
-    t = displayio.TileGrid(pic, pixel_shader=self._palette)
+    t = displayio.TileGrid(pic, pixel_shader=pic.pixel_shader)
     g.append(t)
     self.update(g)
     f.close()
