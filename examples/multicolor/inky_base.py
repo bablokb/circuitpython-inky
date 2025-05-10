@@ -51,14 +51,13 @@ class InkyBase:
 
     self.display.root_group = g
 
-    print(f"waiting for time-to-refresh: {self.display.time_to_refresh}s")
-    time.sleep(self.display.time_to_refresh)
-
-    print("refreshing...:")
+    print("  refreshing...:")
     start = time.monotonic()
     self.display.refresh()
     duration = time.monotonic()-start
     print(f"display (refreshed): {duration:f}s")
+
+    self.display.root_group = None
 
   # --- mount SD   --------------------------------------------------------
 
