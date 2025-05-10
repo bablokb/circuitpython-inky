@@ -173,6 +173,37 @@ class InkyBase:
       print(f"pressed key {ev.key_number}")
       self.blink(self._leds[led_index[ev.key_number]])
 
+  # --- fill with solid color   ----------------------------------------------
+
+  def fill(self,color):
+    """ fill with solid color """
+
+    color_index = None
+    for index, c in enumerate(self._palette):
+      if c == color:
+        color_index = index
+        break
+    if color_index is None:
+      print("fill(): unsupported color!")
+      return
+
+    canvas = displayio.Bitmap(self.display.width,self.display.height,
+                              len(self._palette))
+    canvas.fill(color_index)
+    g = displayio.Group()
+    g.append(displayio.TileGrid(canvas,pixel_shader=self._palette,
+                                tile_width=self.display.width,
+                                tile_height=self.display.height))
+    self.update(g)
+
+  def white(self):
+    """ clear display """
+    self.fill(0xFFFFFF)
+
+  def black(self):
+    """ full black display """
+    self.fill(0x000000)
+
   # --- list of supported/selected tests   -----------------------------------
 
   def tests(self,selected):
@@ -183,7 +214,9 @@ class InkyBase:
       self.show_colors_h,
       self.show_image,
       self.blink_leds,
-      self.use_buttons
+      self.use_buttons,
+      self.black,
+      self.white
     ]
 
     sel_tests = []

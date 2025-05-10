@@ -17,6 +17,8 @@
 #   2 show_image
 #   3 blink_leds
 #   4 use_buttons
+#   5 black
+#   6 white
 
 # --- imports   ------------------------------------------------------------
 
@@ -28,8 +30,8 @@ import gc
 
 # --- select DUT and tests   ----------------------------------------------
 
-from inky_imp import InkyImpression673 as Inky
-my_tests = [2]
+from inky_imp import InkyImpression57 as Inky
+my_tests = [6]
 inky = Inky()
 
 # --- main program   ----------------------------------------------------
