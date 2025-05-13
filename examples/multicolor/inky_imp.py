@@ -52,8 +52,9 @@ class InkyImpression(InkyBase):
   def deinit(self):
     """ free resources """
 
-    #if self._spi:
-    #  self._spi.deinit()
+    displayio.release_displays()
+    if self._spi:
+      self._spi.deinit()
 
   # --- create display   ----------------------------------------------------
 

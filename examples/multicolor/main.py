@@ -24,7 +24,7 @@ TESTS = [
   ]
 
 # selected tests: list of (test,args)
-my_tests = [("fill",0xFF0000), ("black",), ("white",)]
+my_tests = [("black",), ("white",)]
 
 # --- imports   ------------------------------------------------------------
 
@@ -32,16 +32,27 @@ import time
 import board
 import time
 import gc
+import atexit
 
 # --- select DUT and tests   ----------------------------------------------
 
 from inky_imp import InkyImpression57 as Inky
+
+# --- exit processing   ------------------------------------------------------
+
+def at_exit(inky):
+  """ release displays and free SPI-bus """
+
+  print("atexit: deinit ressources")
+  inky.deinit()
 
 # --- main program   ----------------------------------------------------
 
 time.sleep(10)
 print(f"running on board {board.board_id}")
 inky = Inky()
+
+atexit.register(at_exit,inky)
 
 for tst in my_tests:
   start = time.monotonic()
@@ -60,7 +71,6 @@ for tst in my_tests:
     time.sleep(ttr)
     end = time.monotonic()
     print(f"[{end:0.1f}] finished waiting")
-#inky.deinit()
 
 while True:
   time.sleep(1)
