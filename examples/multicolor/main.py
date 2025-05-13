@@ -24,7 +24,7 @@ TESTS = [
   ]
 
 # selected tests: list of (test,args)
-my_tests = [("black",), ("white",)]
+my_tests = [("show_image",), ("black",), ("white",)]
 
 # --- imports   ------------------------------------------------------------
 
@@ -62,15 +62,6 @@ for tst in my_tests:
   end = time.monotonic()
   print(f"[{end:0.1f}] finished: {test}({args}) (duration: {end-start:0.1f})")
   gc.collect()
-
-  # wait the configured time-to-refresh
-  ttr = inky.display.time_to_refresh
-  if ttr:
-    start = time.monotonic()
-    print(f"[{start:0.1f}] waiting {ttr}s")
-    time.sleep(ttr)
-    end = time.monotonic()
-    print(f"[{end:0.1f}] finished waiting")
 
 while True:
   time.sleep(1)

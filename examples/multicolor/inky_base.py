@@ -25,6 +25,8 @@ class InkyBase:
   def __init__(self,led_gpios,colors,dither=False):
     """ constructor """
 
+    self._pad = None
+    self._ledkey_index = None
     self._sd_mounted = False
     self.duration = 0.5
     self._leds = []
@@ -39,24 +41,33 @@ class InkyBase:
       self._palette[index] = color
       print(f"  {index}: {color:06X}")
 
-  # --- free resources   ---------------------------------------------------
+  # --- free resources   --------------------------------------------------
 
   def deinit(self):
     """ free resources """
     pass
 
-  # --- update the display   -----------------------------------------------
+  # --- update the display   ----------------------------------------------
   
   def update(self,g):
     """ update the display """
 
     self.display.root_group = g
 
-    print("  refreshing...:")
+    print("update(): refreshing...:")
     start = time.monotonic()
     self.display.refresh()
-    duration = time.monotonic()-start
-    print(f"display (refreshed): {duration:f}s")
+    end1 = time.monotonic()
+    print(f"  refreshed: {end1-start:0.1f}s")
+    print( "  waiting while busy")
+    self.wait_for_busy()
+    end2 = time.monotonic()
+    print(f"      ready: {end2-end1:0.1f}s")
+    print( "  waiting for time-to-refresh")
+    time.sleep(self.display.time_to_refresh)
+    end3 = time.monotonic()
+    print(f"        ttr: {end3-end2:0.1f}s")
+    print(f"      total: {end3-start:0.1f}s")
 
     self.display.root_group = None
 
@@ -76,7 +87,14 @@ class InkyBase:
       print("failed to mount SD, using internal /sd directory")
     self._sd_mounted = True
 
-  # --- blink a single LED   ---------------------------------------------
+  # --- wait for busy   ---------------------------------------------------
+
+  def wait_for_busy(self):
+    """ wait while display is busy """
+    while self.display.busy:
+      time.sleep(0.1)
+
+  # --- blink a single LED   ----------------------------------------------
 
   def blink(self,led):
     """ blink LED """
@@ -168,9 +186,10 @@ class InkyBase:
   def use_buttons(self):
     """ use buttons and blink corresponding LED """
 
-    pad, led_index = self.keypad()
+    if not self._pad:
+      self._pad, self._ledkey_index = self.keypad()
 
-    queue = pad.events
+    queue = self._pad.events
     queue.clear()
     print("press any button:")
     while True:
@@ -179,7 +198,7 @@ class InkyBase:
         continue
       ev = queue.get()
       print(f"pressed key {ev.key_number}")
-      self.blink(self._leds[led_index[ev.key_number]])
+      self.blink(self._leds[self._ledkey_index[ev.key_number]])
 
   # --- fill with solid color   ----------------------------------------------
 
