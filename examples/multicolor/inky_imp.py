@@ -44,6 +44,7 @@ class InkyImpression(InkyBase):
     self._spi = busio.SPI(SCK_PIN,
                           MOSI=MOSI_PIN,MISO=MISO_PIN)
 
+    self._busy_pin = busy_pin
     self.display = self._display(driver,busy_pin,**kwargs)
     self._cs_pin_sd = CS_PIN_SD
 
@@ -88,7 +89,7 @@ class InkyImpression4(InkyImpression):
     import adafruit_spd1656
     super().__init__(adafruit_spd1656.SPD1656,dither=dither,busy_pin=None,
                      width=640,height=400,
-                     refresh_time=28,seconds_per_frame=40)
+                     refresh_time=28,seconds_per_frame=12)
     self._title     = "Inky-Impression 4"
 
 class InkyImpression57(InkyImpression):
@@ -96,7 +97,7 @@ class InkyImpression57(InkyImpression):
     import adafruit_spd1656
     super().__init__(adafruit_spd1656.SPD1656,dither=dither,
                      width=600,height=448,
-                     refresh_time=28,seconds_per_frame=40)
+                     refresh_time=28,seconds_per_frame=12)
     self._title     = "Inky-Impression 5.7"
 
 class InkyImpression673(InkyImpression):
