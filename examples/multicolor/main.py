@@ -18,11 +18,13 @@ TESTS = [
   "show_image",
   "blink_leds",
   "use_buttons",
+  "fill",
   "black",
   "white",
   ]
 
-my_tests = ["black", "white"]
+# selected tests: list of (test,args)
+my_tests = [("fill",0xFF0000), ("black",), ("white",)]
 
 # --- imports   ------------------------------------------------------------
 
@@ -43,10 +45,11 @@ inky = Inky()
 
 for tst in my_tests:
   start = time.monotonic()
-  print(f"[{start:0.1f}] starting: {tst}()")
-  getattr(inky,tst)()
+  test, *args = tst
+  print(f"[{start:0.1f}] starting: {test}({args})")
+  getattr(inky,test)(*args)
   end = time.monotonic()
-  print(f"[{end:0.1f}] finished: {tst}() (duration: {end-start:0.1f})")
+  print(f"[{end:0.1f}] finished: {test}({args}) (duration: {end-start:0.1f})")
   gc.collect()
 
   # wait the configured time-to-refresh
