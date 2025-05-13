@@ -25,6 +25,7 @@ class InkyBase:
   def __init__(self,led_gpios,colors,dither=False):
     """ constructor """
 
+    self._sd_mounted = False
     self.duration = 0.5
     self._leds = []
     for gpio in led_gpios:
@@ -64,12 +65,16 @@ class InkyBase:
   def _mount_sd(self):
     """ mount SD """
 
+    if self._sd_mounted:
+      return
+
     try:
       sdcard = sdcardio.SDCard(self._spi,self._cs_pin_sd,1_000_000)
       vfs = storage.VfsFat(sdcard)
       storage.mount(vfs, "/sd")
     except:
       print("failed to mount SD, using internal /sd directory")
+    self._sd_mounted = True
 
   # --- blink a single LED   ---------------------------------------------
 
