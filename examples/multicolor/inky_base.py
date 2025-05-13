@@ -138,15 +138,19 @@ class InkyBase:
 
   # --- show image from SD   ---------------------------------------------
 
-  def show_image(self):
+  def show_image(self,name=None):
     """ load and show image """
 
     self._mount_sd()
 
-    f = open(("/sd/image-" +
+    if name is None:
+      name = ("/sd/image-" +
               f"{self.display.width}x{self.display.height}-" +
-              f"{len(self._palette)}c.bmp"),
-             "rb")
+              f"{len(self._palette)}c.bmp")
+    else:
+      name = f"/sd/{name}"
+
+    f = open(name,"rb")
     g = displayio.Group()
     pic = displayio.OnDiskBitmap(f)
     t = displayio.TileGrid(pic, pixel_shader=pic.pixel_shader)
