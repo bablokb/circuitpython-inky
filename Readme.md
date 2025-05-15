@@ -1,6 +1,14 @@
 CircuitPython Drivers for various Pimoroni Inky-Displays
 ========================================================
 
+Although the Inky-Impression displays (and the wHATs) are made for
+Raspberry Pi devices, they can also be used with microcontrollers like
+the RP2xxx-family. You need either an adapter or take care of the
+SPI-wiring yourself. In fact MCU-boards are a better match for these
+displays because they use far less energy as even the smallest Pi and
+thus allow for battery-based operation with longer intervals in
+between charging.
+
 In this repo you will find the module `inky` that has a number of
 CircuitPython driver classes for Pimoroni Inky-Displays:
 
@@ -20,6 +28,27 @@ implementation of suitable drivers should be straightforward.
 For the Inky-Frames 5.7" and 7.3" there are pre-built CircuitPython
 versions available that have builtin support for the respective
 displays, so no separate driver is necessary.
+
+
+Shutdown after Refresh
+----------------------
+
+E-inks are low power devices, so it makes sense to shutdown the MCU as
+well after updating the screen - especially when running on
+batteries. A true shutdown including cutting the power needs to wait
+for the refresh to finish. Since `display.refresh()` is an
+asynchronous operation (it basically sends all the data to the display
+and then starts the refresh), an application program must wait for the
+update to finish. The CircuitPython class `epaperdisplay.EPaperDsplay`
+(the base class of all e-ink drivers) provides the attribute `busy` to
+check the operational state. After calling `display.refresh()` and
+before cutting power you should spin on this attribute.
+
+A better approach would be to pass `busy_pin=None` to the driver and
+then light-sleep until the busy-pin changes state. Since the current
+light-sleep implementation for the RP2040 is only a placebo
+implementation that pretends to light-sleep but in fact only spins,
+this does not save a relevant amount of energy.
 
 
 A note on `seconds_per_frame` and `refresh_time`
@@ -59,7 +88,6 @@ Prereqs for the examples:
   - adafruit_bus_device
   - adafruit_display_shapes
   - adafruit_display_text
-  - adafruit_spd1656.mpy (for first generation Inky-Impression 4/5.7)
 
 
 Dithering
