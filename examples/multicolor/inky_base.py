@@ -59,7 +59,6 @@ class InkyBase:
     self.display.refresh()
     end1 = time.monotonic()
     print(f"  refreshed: {end1-start:0.1f}s")
-    print( "  waiting while busy")
     self.wait_for_busy()
     end2 = time.monotonic()
     print(f"      ready: {end2-end1:0.1f}s")
@@ -91,6 +90,8 @@ class InkyBase:
 
   def wait_for_busy(self):
     """ wait while display is busy """
+
+    print( "  waiting while busy")
     while self.display.busy:
       time.sleep(0.1)
 
