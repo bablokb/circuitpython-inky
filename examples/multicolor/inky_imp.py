@@ -87,7 +87,7 @@ class InkyImpression(InkyBase):
 class InkyImpression4(InkyImpression):
   def __init__(self,dither=False):
     import adafruit_spd1656
-    super().__init__(adafruit_spd1656.SPD1656,dither=dither,busy_pin=None,
+    super().__init__(adafruit_spd1656.SPD1656,dither=dither,
                      width=640,height=400,
                      refresh_time=28,seconds_per_frame=12)
     self._title     = "Inky-Impression 4"
