@@ -5,24 +5,34 @@ In this repo you will find the module `inky` that has a number of
 CircuitPython driver classes for Pimoroni Inky-Displays:
 
   - `inky/what.py`: two and three color e-Inks, 400x300
+  - `inky/acep7.py`: seven color e-Inks (Inky-Impression 4"/5.7")
   - `inky/spectra6.py`: six color e-Inks (Spectra6)
 
+The acep7-driver does not support the 7.3"-variant.
+
 The spectra6-driver currently only supports the 7.3-variant.
-The driver probably also works withe the Spectra6-display from
+The driver probably also works with the Spectra6-display from
 Waveshare. Feedback on this assumption is welcome.
+
+Missing support for various Inkys is due to missing test devices. The
+implementation of suitable drivers should be straightforward.
+
+For the Inky-Frames 5.7" and 7.3" there are pre-built CircuitPython
+versions available that have builtin support for the respective
+displays, so no separate driver is necessary.
 
 
 A note on `seconds_per_frame` and `refresh_time`
 ------------------------------------------------
 
-The spectra6-driver defines default values for `seconds_per_frame` and
+The acep7/spectra6-driver define default values for `seconds_per_frame` and
 `refresh_time`.
 
   - `refresh_time` is the time it takes from start of `display.refresh()` until
     the display has actually refreshed. `display.refresh()` will return before
     the refresh is finished, but will keep the `busy`-attribute `True`. As long
     as you provide a busy-pin, the `refresh_time` is ignored. Since the
-    Inky-Impression has a busy-pin, the refresh-time is only to document the
+    Inky-Impression has a busy-pin, the refresh-time is only used to document the
     expected update-time of the display.
 
   - `seconds_per_frame` is the time from start of (internal) display refresh
@@ -30,7 +40,7 @@ The spectra6-driver defines default values for `seconds_per_frame` and
     in the context of e-ink displays. Idealy, `refresh_time-seconds_per_frame`
     is the raw internal display refresh-time. The reason to set this value so low
     is to allow a new refresh to start immediately after the busy-state is
-    `False` again. This should only be necesary in the context of program
+    `False` again. This should only be necessary in the context of program
     development and tests.
 
 There is no documentation on how often you can update the
