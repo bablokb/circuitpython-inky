@@ -21,7 +21,8 @@ class InkyFrame_57(InkyBase):
 
   # --- constructor   -----------------------------------------------------
 
-  def __init__(self,dither=False):
+  def __init__(self, border_color=None,  # unused
+               dither=False):
     """ constructor """
 
     self._LEDs = [board.LED_A, board.LED_B, board.LED_C,
