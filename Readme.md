@@ -12,6 +12,32 @@ The driver probably also works withe the Spectra6-display from
 Waveshare. Feedback on this assumption is welcome.
 
 
+A note on `seconds_per_frame` and `refresh_time`
+------------------------------------------------
+
+The spectra6-driver defines default values for `seconds_per_frame` and
+`refresh_time`.
+
+  - `refresh_time` is the time it takes from start of `display.refresh()` until
+    the display has actually refreshed. `display.refresh()` will return before
+    the refresh is finished, but will keep the `busy`-attribute `True`. As long
+    as you provide a busy-pin, the `refresh_time` is ignored. Since the
+    Inky-Impression has a busy-pin, the refresh-time is only to document the
+    expected update-time of the display.
+
+  - `seconds_per_frame` is the time from start of (internal) display refresh
+    until the refresh has finished. It should read as 'extra seconds per frame'
+    in the context of e-ink displays. Idealy, `refresh_time-seconds_per_frame`
+    is the raw internal display refresh-time. The reason to set this value so low
+    is to allow a new refresh to start immediately after the busy-state is
+    `False` again. This should only be necesary in the context of program
+    development and tests.
+
+There is no documentation on how often you can update the
+display. Nevertheless, it should not be updated often. Once an hour is
+probably already too often.
+
+
 Examples
 ========
 
