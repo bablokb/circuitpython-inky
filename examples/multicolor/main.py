@@ -34,9 +34,12 @@ import time
 import gc
 import atexit
 
-# --- select DUT and tests   ----------------------------------------------
+# --- select DUT   --------------------------------------------------------
 
 from inky_imp import InkyImpression57 as Inky
+
+border_color = None
+#from inky.acep7 import GREEN as border_color
 
 # --- exit processing   ------------------------------------------------------
 
@@ -50,7 +53,7 @@ def at_exit(inky):
 
 time.sleep(10)
 print(f"running on board {board.board_id}")
-inky = Inky()
+inky = Inky(border_color=border_color)
 
 atexit.register(at_exit,inky)
 
