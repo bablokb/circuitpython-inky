@@ -60,7 +60,11 @@ class ACEP7(epaperdisplay.EPaperDisplay):
       Display rotation
     """
 
-  def __init__(self, bus, border_color=None, **kwargs):
+  def __init__(self, bus,
+               border_color=None,
+               refresh_time=28,
+               seconds_per_frame=12,
+               **kwargs):
     if border_color is None:
       border_color = WHITE
     else:
@@ -109,6 +113,8 @@ class ACEP7(epaperdisplay.EPaperDisplay):
       ram_width=640,
       ram_height=480,
       start_up_time=1,
+      seconds_per_frame=seconds_per_frame,
+      refresh_time=refresh_time,
       busy_state=False,
       write_black_ram_command=0x10,
       refresh_display_command=0x12,

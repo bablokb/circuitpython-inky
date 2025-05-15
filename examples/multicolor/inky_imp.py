@@ -93,8 +93,7 @@ class InkyImpression4(InkyImpression):
     from inky import acep7
     super().__init__(acep7.ACEP7,border_color=border_color,
                      dither=dither,
-                     width=640,height=400,
-                     refresh_time=28,seconds_per_frame=12)
+                     width=640,height=400)
     self._title     = "Inky-Impression 4"
 
 class InkyImpression57(InkyImpression):
@@ -102,8 +101,7 @@ class InkyImpression57(InkyImpression):
     from inky import acep7
     super().__init__(acep7.ACEP7, border_color=border_color,
                      dither=dither,
-                     width=600,height=448,
-                     refresh_time=28,seconds_per_frame=12)
+                     width=600,height=448)
     self._title     = "Inky-Impression 5.7"
 
 class InkyImpression673(InkyImpression):
