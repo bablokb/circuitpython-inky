@@ -49,11 +49,34 @@ _REFRESH_SEQUENCE = (
   b"\x12\x01\x00"                        # DRF
 )
 
+# A note on `seconds_per_frame` and `refresh_time`:
+#
+# - `refresh_time` is the time it takes from start of display.refresh() until
+#   the display has actually refreshed. `display.refresh()` will return before
+#   the refresh is finished, but will keep the `busy`-attribute `True`. As long
+#   as you provide a busy-pin, the `refresh_time` is ignored. Since the
+#   Inky-Impression has a busy-pin, the refresh-time is only to document the
+#   expected update-time of the display.
+#
+# - `seconds_per_frame` is the time from start of (internal) display refresh
+#   until the refresh has finished. It should read as 'extra seconds per frame'
+#   in the context of e-ink displays. Idealy, `refresh_time-seconds_per_frame`
+#   is the internal display refresh-time. The reason to set this value so low
+#   is to allow a new refresh to start immediately after the busy-state is
+#   `False` again. This should only be necesary in the context of program
+#   development and tests.
+#
+# There is no documentation on how often you can update the display. Nevertheless,
+# it should not be updated often. Once an hour is probably already too often.
+
 class Inky_673(epaperdisplay.EPaperDisplay):
   """ Inky Impression Spectra-6 7.3in driver """
 
   def __init__(self, bus: fourwire.FourWire,
-               border_color='white', **kwargs) -> None:
+               border_color='white',
+               seconds_per_frame=9,
+               refresh_time=25.0,
+               **kwargs) -> None:
 
     super().__init__(
       bus,
@@ -69,6 +92,6 @@ class Inky_673(epaperdisplay.EPaperDisplay):
       write_black_ram_command=0x10,                  # DTM1
       refresh_display_command=_REFRESH_SEQUENCE,
       spectra6=True,
-      seconds_per_frame=24,
-      refresh_time=24.0,
+      seconds_per_frame=seconds_per_frame,
+      refresh_time=refresh_time,
     )
