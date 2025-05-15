@@ -73,7 +73,7 @@ class Inky_673(epaperdisplay.EPaperDisplay):
   """ Inky Impression Spectra-6 7.3in driver """
 
   def __init__(self, bus: fourwire.FourWire,
-               border_color='white',
+               border_color=None,             # unsupported
                seconds_per_frame=9,
                refresh_time=25.0,
                **kwargs) -> None:
