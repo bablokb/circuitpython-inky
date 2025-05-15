@@ -40,6 +40,11 @@ from inky_imp import InkyImpression57 as Inky
 
 border_color = None
 #from inky.acep7 import GREEN as border_color
+inky_args = {
+  "border_color": border_color,
+#  "busy_pin": None,
+#  "refresh_time": 12,
+  }
 
 # --- exit processing   ------------------------------------------------------
 
@@ -53,7 +58,7 @@ def at_exit(inky):
 
 time.sleep(10)
 print(f"running on board {board.board_id}")
-inky = Inky(border_color=border_color)
+inky = Inky(**inky_args)
 
 atexit.register(at_exit,inky)
 
