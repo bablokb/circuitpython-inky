@@ -34,7 +34,10 @@ class InkyImpression(InkyBase):
 
   # --- constructor   -----------------------------------------------------
 
-  def __init__(self,driver,colors=None,dither=False,busy_pin=BUSY_PIN,**kwargs):
+  def __init__(self,driver,colors=None,
+               border_color=None,
+               dither=False,
+               busy_pin=BUSY_PIN,**kwargs):
     """ constructor """
 
     if colors is None:
@@ -45,7 +48,8 @@ class InkyImpression(InkyBase):
                           MOSI=MOSI_PIN,MISO=MISO_PIN)
 
     self._busy_pin = busy_pin
-    self.display = self._display(driver,busy_pin,**kwargs)
+    self.display = self._display(driver,busy_pin,
+                                 border_color=border_color,**kwargs)
     self._cs_pin_sd = CS_PIN_SD
 
   # --- free resources   ---------------------------------------------------
@@ -85,25 +89,28 @@ class InkyImpression(InkyBase):
 # --- Product specific subclasses   -----------------------------------------
 
 class InkyImpression4(InkyImpression):
-  def __init__(self,dither=False):
-    import adafruit_spd1656
-    super().__init__(adafruit_spd1656.SPD1656,dither=dither,
+  def __init__(self,border_color=None,dither=False):
+    from inky import acep7
+    super().__init__(acep7.ACEP7,border_color=border_color,
+                     dither=dither,
                      width=640,height=400,
                      refresh_time=28,seconds_per_frame=12)
     self._title     = "Inky-Impression 4"
 
 class InkyImpression57(InkyImpression):
-  def __init__(self,dither=False):
-    import adafruit_spd1656
-    super().__init__(adafruit_spd1656.SPD1656,dither=dither,
+  def __init__(self,border_color=None,dither=False):
+    from inky import acep7
+    super().__init__(acep7.ACEP7, border_color=border_color,
+                     dither=dither,
                      width=600,height=448,
                      refresh_time=28,seconds_per_frame=12)
     self._title     = "Inky-Impression 5.7"
 
 class InkyImpression673(InkyImpression):
-  def __init__(self,dither=False):
+  def __init__(self,border_color=None,dither=False):
     from inky import spectra6
-    super().__init__(spectra6.Inky_673,dither=dither,
+    super().__init__(spectra6.Inky_673, border_color=border_color,
+                     dither=dither,
                      colors = [0x000000, 0xFFFFFF, 0xFF0000,
                                0x00FF00, 0x0000FF, 0xFFFF00,
                                ])
