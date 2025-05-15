@@ -35,7 +35,6 @@ class InkyImpression(InkyBase):
   # --- constructor   -----------------------------------------------------
 
   def __init__(self,driver,colors=None,
-               border_color=None,
                dither=False,
                busy_pin=BUSY_PIN,**kwargs):
     """ constructor """
@@ -48,9 +47,22 @@ class InkyImpression(InkyBase):
                           MOSI=MOSI_PIN,MISO=MISO_PIN)
 
     self._busy_pin = busy_pin
-    self.display = self._display(driver,busy_pin,
-                                 border_color=border_color,**kwargs)
+    self.display = self._display(driver, busy_pin, **kwargs)
     self._cs_pin_sd = CS_PIN_SD
+
+  # --- wait for busy   ---------------------------------------------------
+
+  def wait_for_busy(self):
+    """ wait while display is busy """
+    if self._busy_pin:
+      super().wait_for_busy()
+      return
+
+    # otherwise, use light-sleep
+    print( "  sleeping while busy")
+    import alarm
+    pin_alarm = alarm.pin.PinAlarm(BUSY_PIN,value=False,edge=True,pull=True)
+    alarm.light_sleep_until_alarms(pin_alarm)
 
   # --- free resources   ---------------------------------------------------
 
@@ -89,27 +101,24 @@ class InkyImpression(InkyBase):
 # --- Product specific subclasses   -----------------------------------------
 
 class InkyImpression4(InkyImpression):
-  def __init__(self,border_color=None,dither=False):
+  def __init__(self,**kwargs):
     from inky import acep7
-    super().__init__(acep7.ACEP7,border_color=border_color,
-                     dither=dither,
-                     width=640,height=400)
+    super().__init__(acep7.ACEP7,
+                     width=640,height=400,**kwargs)
     self._title     = "Inky-Impression 4"
 
 class InkyImpression57(InkyImpression):
-  def __init__(self,border_color=None,dither=False):
+  def __init__(self,**kwargs):
     from inky import acep7
-    super().__init__(acep7.ACEP7, border_color=border_color,
-                     dither=dither,
-                     width=600,height=448)
+    super().__init__(acep7.ACEP7,
+                     width=600,height=448, **kwargs)
     self._title     = "Inky-Impression 5.7"
 
 class InkyImpression673(InkyImpression):
-  def __init__(self,border_color=None,dither=False):
+  def __init__(self, **kwargs):
     from inky import spectra6
-    super().__init__(spectra6.Inky_673, border_color=border_color,
-                     dither=dither,
+    super().__init__(spectra6.Inky_673,
                      colors = [0x000000, 0xFFFFFF, 0xFF0000,
                                0x00FF00, 0x0000FF, 0xFFFF00,
-                               ])
+                               ], **kwargs)
     self._title     = "Inky-Impression(2025) 7.3"
