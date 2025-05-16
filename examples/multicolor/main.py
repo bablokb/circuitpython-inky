@@ -56,7 +56,7 @@ def at_exit(inky):
 
 # --- main program   ----------------------------------------------------
 
-time.sleep(10)
+time.sleep(5)
 print(f"running on board {board.board_id}")
 inky = Inky(**inky_args)
 
