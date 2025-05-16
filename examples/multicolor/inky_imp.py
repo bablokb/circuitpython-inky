@@ -50,20 +50,6 @@ class InkyImpression(InkyBase):
     self.display = self._display(driver, busy_pin, **kwargs)
     self._cs_pin_sd = CS_PIN_SD
 
-  # --- wait for busy   ---------------------------------------------------
-
-  def wait_for_busy(self):
-    """ wait while display is busy """
-    if self._busy_pin:
-      super().wait_for_busy()
-      return
-
-    # otherwise, use light-sleep
-    print( "  sleeping while busy")
-    import alarm
-    pin_alarm = alarm.pin.PinAlarm(BUSY_PIN,value=False,edge=True,pull=True)
-    alarm.light_sleep_until_alarms(pin_alarm)
-
   # --- free resources   ---------------------------------------------------
 
   def deinit(self):

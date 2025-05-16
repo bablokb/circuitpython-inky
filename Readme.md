@@ -44,12 +44,6 @@ update to finish. The CircuitPython class `epaperdisplay.EPaperDsplay`
 check the operational state. After calling `display.refresh()` and
 before cutting power you should spin on this attribute.
 
-A better approach would be to pass `busy_pin=None` to the driver and
-then light-sleep until the busy-pin changes state. Since the current
-light-sleep implementation for the RP2040 is only a placebo
-implementation that pretends to light-sleep but in fact only spins,
-this does not save a relevant amount of energy.
-
 
 A note on `seconds_per_frame` and `refresh_time`
 ------------------------------------------------
